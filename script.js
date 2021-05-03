@@ -20,6 +20,7 @@ let ctrlKeyFlag = false;
 let shiftKeyFlag = false;
 let speed = 10;
 let arrOfGraphs = [graphWithoutCover];
+let flagFirst = true;
 
 function ResizeWindow() {
   let width =
@@ -29,19 +30,31 @@ function ResizeWindow() {
   let height = document.documentElement.clientHeight / 1.55 - 20;
 
   let canvas = document.getElementById('canvas_without_cover');
-  graphWithoutCover = {
-    canvas,
-    context: canvas.getContext('2d'),
-    width,
-    height,
-  };
+  graphWithoutCover.width = width;
+  graphWithoutCover.height = height;
+  if (flagFirst) {
+    graphWithoutCover = {
+      canvas,
+      context: canvas.getContext('2d'),
+      width,
+      height,
+    };
+  }
   canvas.width = width;
   canvas.height = height;
 
   canvas = document.getElementById('canvas_cover');
-  graphCover = { canvas, context: canvas.getContext('2d'), width, height };
+  graphCover.width = width;
+  graphCover.height = height;
+  if (flagFirst) {
+    graphCover = { canvas, context: canvas.getContext('2d'), width, height };
+    flagFirst = false;
+  }
   canvas.width = width;
   canvas.height = height;
+
+  graphCover.points && Draw(graphCover);
+  graphWithoutCover.points && Draw(graphWithoutCover);
 }
 
 window.onresize = ResizeWindow;
@@ -88,7 +101,7 @@ function addNewGraph(graph) {
       if (arrOfGraphs.length > 1) {
         equalizeGraphs();
         arrOfGraphs.forEach((e) => {
-          Draw(e);
+          e.points && Draw(e);
         });
       }
     }
@@ -108,7 +121,7 @@ document.getElementById('input_without_cover_from').onkeyup = (e) => {
     }
     graphWithoutCover.selectedPoints[0] =
       graphWithoutCover.positiveTopPoints[value];
-    Draw(graphWithoutCover);
+    graphWithoutCover.points && Draw(graphWithoutCover);
   }
 };
 
@@ -124,7 +137,7 @@ document.getElementById('input_without_cover_to').onkeyup = (e) => {
     }
     graphWithoutCover.selectedPoints[1] =
       graphWithoutCover.positiveTopPoints[value];
-    Draw(graphWithoutCover);
+    graphWithoutCover.points && Draw(graphWithoutCover);
   }
 };
 
@@ -135,7 +148,7 @@ document.getElementById('input_cover_from').onkeyup = (e) => {
       graphCover.selectedPoints = [];
     }
     graphCover.selectedPoints[0] = graphCover.positiveTopPoints[value];
-    Draw(graphCover);
+    graphCover.points && Draw(graphCover);
   }
 };
 
@@ -150,7 +163,7 @@ document.getElementById('input_cover_to').onkeyup = (e) => {
       graphCover.selectedPoints = [];
     }
     graphCover.selectedPoints[1] = graphCover.positiveTopPoints[value];
-    Draw(graphCover);
+    graphCover.points && Draw(graphCover);
   }
 };
 
@@ -183,7 +196,7 @@ graphWithoutCover.canvas.onclick = (e) => {
       }
     }
 
-    Draw(graphWithoutCover);
+    graphWithoutCover.points && Draw(graphWithoutCover);
   }
   addNewGraph(graphWithoutCover);
 };
@@ -218,7 +231,7 @@ graphCover.canvas.onclick = (e) => {
       }
     }
 
-    Draw(graphCover);
+    graphCover.points && Draw(graphCover);
   }
   addNewGraph(graphCover);
 };
@@ -267,9 +280,9 @@ graphWithoutCover.link.addEventListener('change', function () {
       y: 1,
       offsetY: 0,
     };
-    graphWithoutCover.colorLine = 'rgb(88, 68, 140)';
+    graphWithoutCover.colorLine = 'rgb(68, 140, 127)';
 
-    Draw(graphWithoutCover);
+    graphWithoutCover.points && Draw(graphWithoutCover);
   };
   try {
     fr.readAsText(this.files[0]);
@@ -441,7 +454,7 @@ document.addEventListener('keydown', (event) => {
       if (flagKey === 'y' && currentGraph.grid.y > 1) currentGraph.grid.y -= 1;
     }
 
-    Draw(currentGraph);
+    currentGraph.points && Draw(currentGraph);
   });
 });
 
@@ -532,4 +545,4 @@ buttonResult.onclick = () => {
 
 document.getElementById('info_button').onclick = () => {
   document.getElementById('about_program').classList.toggle('off');
-}
+};

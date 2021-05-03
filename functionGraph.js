@@ -105,7 +105,7 @@ function showPoint(event, graph, pointIndex) {
     }
     if (document.documentElement.clientHeight / 1.55 - 20 < yPos) {
       showBox.style.top = `${
-        document.documentElement.clientHeight / 1.55 - 140
+        document.documentElement.clientHeight / 1.55 - 20 - 120
       }px`;
     } else {
       showBox.style.top = `${yPos - 113}px`;
