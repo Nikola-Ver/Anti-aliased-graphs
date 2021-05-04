@@ -472,7 +472,7 @@ buttonCalcWithoutCover.onclick = () => {
       if (graphWithoutCover.positiveTopPoints) {
         let A1 = graphWithoutCover.positiveTopPoints[fromPoint].y;
         let An = graphWithoutCover.positiveTopPoints[toPoint].y;
-        let sigma = (1 / (toPoint - fromPoint + 1)) * Math.log(A1 / An);
+        let sigma = (1 / (toPoint - fromPoint)) * Math.log(A1 / An);
         graphWithoutCover.sigma = sigma;
 
         let div = document.getElementById('sigma_without_cover');
@@ -494,7 +494,7 @@ buttonCalcCover.onclick = () => {
       if (graphCover.positiveTopPoints) {
         let A1 = graphCover.positiveTopPoints[fromPoint].y;
         let An = graphCover.positiveTopPoints[toPoint].y;
-        let sigma = (1 / (toPoint - fromPoint + 1)) * Math.log(A1 / An);
+        let sigma = (1 / (toPoint - fromPoint)) * Math.log(A1 / An);
         graphCover.sigma = sigma;
 
         let div = document.getElementById('sigma_cover');
