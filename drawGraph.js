@@ -5,6 +5,27 @@ function drawPoint([{ x, y }], ctx) {
   ctx.stroke();
 }
 
+// переменные для калмана
+let varVolt = 0.00569181; // среднее отклонение (ищем в excel)
+let varProcess = 0.05; // скорость реакции на изменение (подбирается вручную)
+let Pc = 0.0;
+let G = 0.0;
+let P = 1.0;
+let Xp = 0.0;
+let Zp = 0.0;
+let Xe = 0.0;
+
+function kalmanFilter(val) {
+  //функция фильтрации
+  Pc = P + varProcess;
+  G = Pc / (Pc + varVolt);
+  P = (1 - G) * Pc;
+  Xp = Xe;
+  Zp = Xp;
+  Xe = G * (val - Zp) + Xp; // "фильтрованное" значение
+  return Xe;
+}
+
 function Draw(graph) {
   graph.context.clearRect(0, 0, graph.width, graph.height);
 
@@ -56,6 +77,15 @@ function Draw(graph) {
     DrawXY(graph.coeffGraph, graph.context, 'white');
 
     graph.topPoints = SearchMaxPoints(graph.points);
+
+    // Филтрация максимумов по фильтру Калмана
+    // graph.topPoints = graph.topPoints.map(({ x, y }) => {
+    //   return {
+    //     x,
+    //     y: kalmanFilter(y),
+    //   };
+    // });
+
     graph.positiveTopPoints = graph.topPoints.filter(
       (e, i) => e.y > 0 && i > 0
     );
