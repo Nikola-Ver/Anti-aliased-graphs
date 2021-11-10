@@ -1,1 +1,0 @@
-# Anti aliased graphs
